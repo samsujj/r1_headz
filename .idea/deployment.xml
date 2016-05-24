@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="R1 Headz">
+    <serverData>
+      <paths name="R1 Headz">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/public_html/projects/r1_headz" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
