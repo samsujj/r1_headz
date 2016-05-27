@@ -8820,7 +8820,7 @@ function $HttpProvider() {
     /**
      * Interceptors stored in reverse order. Inner interceptors before outer interceptors.
      * The reversal is needed so that we can build up the interception chain around the
-     * server request.
+     * nodeserver request.
      */
     var reversedInterceptors = [];
 
@@ -8869,7 +8869,7 @@ function $HttpProvider() {
      *     }).
      *     error(function(data, status, headers, config) {
      *       // called asynchronously if an error occurs
-     *       // or server returns response with an error status.
+     *       // or nodeserver returns response with an error status.
      *     });
      * ```
      *
@@ -8882,7 +8882,7 @@ function $HttpProvider() {
      *     }).
      *     error(function(data, status, headers, config) {
      *       // called asynchronously if an error occurs
-     *       // or server returns response with an error status.
+     *       // or nodeserver returns response with an error status.
      *     });
      * ```
      *
@@ -9041,15 +9041,15 @@ function $HttpProvider() {
      *
      * To enable caching, set the request configuration `cache` property to `true` (to use default
      * cache) or to a custom cache object (built with {@link ng.$cacheFactory `$cacheFactory`}).
-     * When the cache is enabled, `$http` stores the response from the server in the specified
+     * When the cache is enabled, `$http` stores the response from the nodeserver in the specified
      * cache. The next time the same request is made, the response is served from the cache without
-     * sending a request to the server.
+     * sending a request to the nodeserver.
      *
      * Note that even if the response is served from cache, delivery of the data is asynchronous in
      * the same way that real requests are.
      *
      * If there are multiple GET requests for the same URL that should be cached using the same
-     * cache, but the cache is not populated yet, only one request to the server will be made and
+     * cache, but the cache is not populated yet, only one request to the nodeserver will be made and
      * the remaining requests will be fulfilled using the response from the first request.
      *
      * You can change the default cache to a new object (built with
@@ -9067,7 +9067,7 @@ function $HttpProvider() {
      *
      * For purposes of global error handling, authentication, or any kind of synchronous or
      * asynchronous pre-processing of request or postprocessing of responses, it is desirable to be
-     * able to intercept requests before they are handed to the server and
+     * able to intercept requests before they are handed to the nodeserver and
      * responses before they are handed over to the application code that
      * initiated these requests. The interceptors leverage the {@link ng.$q
      * promise APIs} to fulfill this need for both synchronous and asynchronous pre-processing.
@@ -9152,8 +9152,8 @@ function $HttpProvider() {
      * - [JSON vulnerability](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)
      * - [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)
      *
-     * Both server and the client must cooperate in order to eliminate these threats. Angular comes
-     * pre-configured with strategies that address these issues, but for this to work backend server
+     * Both nodeserver and the client must cooperate in order to eliminate these threats. Angular comes
+     * pre-configured with strategies that address these issues, but for this to work backend nodeserver
      * cooperation is required.
      *
      * ### JSON Vulnerability Protection
@@ -9161,15 +9161,15 @@ function $HttpProvider() {
      * A [JSON vulnerability](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)
      * allows third party website to turn your JSON resource URL into
      * [JSONP](http://en.wikipedia.org/wiki/JSONP) request under some conditions. To
-     * counter this your server can prefix all JSON requests with following string `")]}',\n"`.
+     * counter this your nodeserver can prefix all JSON requests with following string `")]}',\n"`.
      * Angular will automatically strip the prefix before processing it as JSON.
      *
-     * For example if your server needs to return:
+     * For example if your nodeserver needs to return:
      * ```js
      * ['one','two']
      * ```
      *
-     * which is vulnerable to attack, your server can return:
+     * which is vulnerable to attack, your nodeserver can return:
      * ```js
      * )]}',
      * ['one','two']
@@ -9184,15 +9184,15 @@ function $HttpProvider() {
      * an unauthorized site can gain your user's private data. Angular provides a mechanism
      * to counter XSRF. When performing XHR requests, the $http service reads a token from a cookie
      * (by default, `XSRF-TOKEN`) and sets it as an HTTP header (`X-XSRF-TOKEN`). Since only
-     * JavaScript that runs on your domain could read the cookie, your server can be assured that
+     * JavaScript that runs on your domain could read the cookie, your nodeserver can be assured that
      * the XHR came from JavaScript running on your domain. The header will not be set for
      * cross-domain requests.
      *
-     * To take advantage of this, your server needs to set a token in a JavaScript readable session
+     * To take advantage of this, your nodeserver needs to set a token in a JavaScript readable session
      * cookie called `XSRF-TOKEN` on the first HTTP GET request. On subsequent XHR requests the
-     * server can verify that the cookie matches `X-XSRF-TOKEN` HTTP header, and therefore be sure
+     * nodeserver can verify that the cookie matches `X-XSRF-TOKEN` HTTP header, and therefore be sure
      * that only JavaScript running on your domain could have sent the request. The token must be
-     * unique for each user and must be verifiable by the server (to prevent the JavaScript from
+     * unique for each user and must be verifiable by the nodeserver (to prevent the JavaScript from
      * making up its own tokens). We recommend that the token is a digest of your site's
      * authentication cookie with a [salt](https://en.wikipedia.org/wiki/Salt_(cryptography&#41;)
      * for added security.
@@ -9212,7 +9212,7 @@ function $HttpProvider() {
      *      JSONified.
      *    - **data** – `{string|Object}` – Data to be sent as the request message data.
      *    - **headers** – `{Object}` – Map of strings or functions which return strings representing
-     *      HTTP headers to send to the server. If the return value of a function is null, the
+     *      HTTP headers to send to the nodeserver. If the return value of a function is null, the
      *      header will not be sent.
      *    - **xsrfHeaderName** – `{string}` – Name of HTTP header to populate with the XSRF token.
      *    - **xsrfCookieName** – `{string}` – Name of cookie containing the XSRF token.
@@ -10076,7 +10076,7 @@ function $InterpolateProvider() {
      * output when the $interpolate service processes the text. So, for HTML elements interpolated
      * by {@link ng.$compile $compile}, or otherwise interpolated with the `mustHaveExpression` parameter
      * set to `true`, the interpolated text must contain an unescaped interpolation expression. As such,
-     * this is typically useful only when user-data is used in rendering a template from the server, or
+     * this is typically useful only when user-data is used in rendering a template from the nodeserver, or
      * when otherwise untrusted data is used by a directive.
      *
      * <example>
@@ -10085,7 +10085,7 @@ function $InterpolateProvider() {
      *      <p ng-init="apptitle='Escaping demo'">{{apptitle}}: \{\{ username = "defaced value"; \}\}
      *        </p>
      *      <p><strong>{{username}}</strong> attempts to inject code which will deface the
-     *        application, but fails to accomplish their task, because the server has correctly
+     *        application, but fails to accomplish their task, because the nodeserver has correctly
      *        escaped the interpolation start/end markers with REVERSE SOLIDUS U+005C (backslash)
      *        characters.</p>
      *      <p>Instead, the result of the attempted script injection is visible, and can be removed
@@ -10616,7 +10616,7 @@ function stripFile(url) {
   return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
 }
 
-/* return the server only (scheme://host:port) */
+/* return the nodeserver only (scheme://host:port) */
 function serverBase(url) {
   return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
 }
@@ -15369,18 +15369,18 @@ function $SceDelegateProvider() {
  * bindings.  (HTML is just one example of a context where rendering user controlled input creates
  * security vulnerabilities.)
  *
- * For the case of HTML, you might use a library, either on the client side, or on the server side,
+ * For the case of HTML, you might use a library, either on the client side, or on the nodeserver side,
  * to sanitize unsafe HTML before binding to the value and rendering it in the document.
  *
  * How would you ensure that every place that used these types of bindings was bound to a value that
- * was sanitized by your library (or returned as safe for rendering by your server?)  How can you
+ * was sanitized by your library (or returned as safe for rendering by your nodeserver?)  How can you
  * ensure that you didn't accidentally delete the line that sanitized the value, or renamed some
  * properties/fields and forgot to update the binding to the sanitized value?
  *
  * To be secure by default, you want to ensure that any such bindings are disallowed unless you can
  * determine that something explicitly says it's safe to use a value for binding in that
  * context.  You can then audit your code (a simple grep would do) to ensure that this is only done
- * for those values that you can easily tell are safe - because they were received from your server,
+ * for those values that you can easily tell are safe - because they were received from your nodeserver,
  * sanitized by your library, etc.  You can organize your codebase to help with this - perhaps
  * allowing only the files in a specific directory to do this.  Ensuring that the internal API
  * exposed by that code doesn't markup arbitrary values as safe then becomes a more manageable task.
@@ -18544,7 +18544,7 @@ function FormController(element, attrs, $scope, $animate, $interpolate) {
  *
  * Note: the purpose of `ngForm` is to group controls,
  * but not to be a replacement for the `<form>` tag with all of its capabilities
- * (e.g. posting to the server, ...).
+ * (e.g. posting to the nodeserver, ...).
  *
  * @param {string=} ngForm|name Name of the form. If specified, the form controller will be published into
  *                       related scope, under this name.
@@ -18589,10 +18589,10 @@ function FormController(element, attrs, $scope, $animate, $interpolate) {
  *
  * Since the role of forms in client-side Angular applications is different than in classical
  * roundtrip apps, it is desirable for the browser not to translate the form submission into a full
- * page reload that sends the data to the server. Instead some javascript logic should be triggered
+ * page reload that sends the data to the nodeserver. Instead some javascript logic should be triggered
  * to handle the form submission in an application-specific way.
  *
- * For this reason, Angular prevents the default action (form submission to the server) unless the
+ * For this reason, Angular prevents the default action (form submission to the nodeserver) unless the
  * `<form>` element has an `action` attribute specified.
  *
  * You can use one of the following two ways to specify what javascript method should be called when
@@ -21380,7 +21380,7 @@ var ngControllerDirective = [function() {
    ```
   * @example
       // Note: the suffix `.csp` in the example name triggers
-      // csp mode in our http server!
+      // csp mode in our http nodeserver!
       <example name="example.csp" module="cspExample" ng-csp="true">
         <file name="index.html">
           <div ng-controller="MainController as ctrl">
@@ -21824,7 +21824,7 @@ forEach(
  * Enables binding angular expressions to onsubmit events.
  *
  * Additionally it prevents the default action (which for form means sending the request to the
- * server and reloading the current page), but only if the form does not contain `action`,
+ * nodeserver and reloading the current page), but only if the form does not contain `action`,
  * `data-action`, or `x-action` attributes.
  *
  * <div class="alert alert-warning">
@@ -22674,7 +22674,7 @@ is set to `true`. The parse error is stored in `ngModel.$error.parse`.
  *      is unfulfilled, its key will be added to the controllers `$pending` property. Also, all asynchronous validators
  *      will only run once all synchronous validators have passed.
  *
- * Please note that if $http is used then it is important that the server returns a success HTTP response code
+ * Please note that if $http is used then it is important that the nodeserver returns a success HTTP response code
  * in order to fulfill the validation and a status level of `4xx` in order to reject the validation.
  *
  * ```js
@@ -23124,7 +23124,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
       // This prevents changing an invalid modelValue to undefined
       if (!allowInvalid && prevValid !== allValid) {
         // Note: Don't check ctrl.$valid here, as we could have
-        // external validators (e.g. calculated on the server),
+        // external validators (e.g. calculated on the nodeserver),
         // that just call $setValidity and need the model value
         // to calculate their validity.
         ctrl.$modelValue = allValid ? modelValue : undefined;
@@ -23291,7 +23291,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     ctrl.$$runValidators(modelValue, ctrl.$$lastCommittedViewValue, function(allValid) {
       if (!allowInvalid) {
         // Note: Don't check ctrl.$valid here, as we could have
-        // external validators (e.g. calculated on the server),
+        // external validators (e.g. calculated on the nodeserver),
         // that just call $setValidity and need the model value
         // to calculate their validity.
         ctrl.$modelValue = allValid ? modelValue : undefined;
@@ -25537,7 +25537,7 @@ var ngOptionsMinErr = minErr('ngOptions');
  *   * `trackexpr`: Used when working with an array of objects. The result of this expression will be
  *      used to identify the objects in the array. The `trackexpr` will most likely refer to the
  *     `value` variable (e.g. `value.propertyName`). With this the selection is preserved
- *      even when the options are recreated (e.g. reloaded from the server).
+ *      even when the options are recreated (e.g. reloaded from the nodeserver).
  *
  * @example
     <example module="selectExample">
