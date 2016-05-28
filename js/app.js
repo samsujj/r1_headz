@@ -3,23 +3,164 @@
 /* App Module */
 var r1headzappvar = angular.module('r1headzapp', ['ui.router','angularValidator','ngCookies','ui.bootstrap','ngFileUpload','ui.tinymce']);
 
-r1headzappvar.run(['$rootScope', function($rootScope){
+r1headzappvar.run(['$rootScope', '$state','contentservice','$uibModal','$log',function($rootScope, $state,contentservice,$uibModal,$log){
+
     $rootScope.$on('$stateChangeStart', function () {
         $rootScope.stateIsLoading = true;
     });
 
-    $rootScope.$on('$stateChangeSuccess',function(ev, to, toParams, from, fromParams){
+    $rootScope.$on('$stateChangeSuccess',function(ev, to, toParams, from, fromParams) {
         $rootScope.stateIsLoading = false;
         $rootScope.previousState = from.name;
         $rootScope.currentState = to.name;
         $(document).scrollTop(0);
+
+        $rootScope.refreshcontent=function(){
+            if (typeof (data) != 'undefined') unset(data);
+            $rootScope.interval = 600;
+            $rootScope.contentupdated = false;
+            //var data=contentservice.getcontent( $rootScope.adminUrl+'listcontent');
+            var myVar = setInterval(function () {
+                $rootScope.contentbasedata = contentservice.getcontent($rootScope.adminUrl + 'listcontent');
+                if (typeof ($rootScope.contentbasedata) != 'undefined') {
+                    clearInterval(myVar);
+                }
+                $rootScope.contentlist = [];
+                $rootScope.conf = [];
+                $rootScope.contenttype = [];
+                angular.forEach($rootScope.contentbasedata, function (value, key) {
+                    //console.log(value.type);
+                    $rootScope.tempval = value;
+                    if (value.ctype == "html" || value.ctype == 'text') {
+                        $rootScope.tempval.content = JSON.parse(value.content);
+                        $rootScope.contentvalue = '';
+                        angular.forEach($rootScope.tempval.content, function (value1, key1) {
+                            $rootScope.contentvalue += value1;
+                        });
+
+                        $rootScope.tempval.content = $rootScope.contentvalue;
+                    }
+                    else {
+                        $rootScope.tempval.content = "<img src = nodeserver/uploads/" + value.content + " /> ";
+                    }
+                    $rootScope.contentlist.splice(value.id, 0, $rootScope.tempval);
+                    $rootScope.conf[value.id] = $rootScope.tempval.content;
+                    $rootScope.contenttype[value.id] = $rootScope.tempval.ctype;
+
+                    $rootScope[value.cname + value.id] = $rootScope.tempval;
+                    //array.splice(2, 0, "three");
+                    if (value.parentid != 0) {
+                        $rootScope.conf[value.parentid] = $rootScope.tempval.content;
+                        $rootScope.contenttype[value.parentid] = $rootScope.tempval.ctype;
+                        $rootScope[value.cname + value.parentid] = $rootScope.tempval;
+                    }
+                });
+
+            }, $rootScope.interval);
+        }
+
+
+
+        $rootScope.refreshcontent();
+
+        $rootScope.convert=function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth()+1)),
+                day  = ("0" + date.getDate()),
+                hour  = ("0" + date.getHours()),
+                minute  = ("0" + date.getMinutes());
+            console.log(date);
+            return [ date.getFullYear(), mnth, day,hour,minute ].join("-");
+            //return new Date(date).getTime() / 1000
+        }
+        $rootScope.timeConverter=function (UNIX_timestamp){
+            var a = new Date(UNIX_timestamp * 1000);
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var month1 = a.getUTCMonth();
+            var date = a.getDate();
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+            var time = month + ' ' + date + ' ' + year + '  ' + hour + ':' + min + ':' + sec ;
+            return time;
+        }
+
+
+
+
+
     });
 
+    $rootScope.items = ['item1', 'item2', 'item3'];
 
+    $rootScope.animationsEnabled = true;
 
+    $rootScope.opencontentmodal = function (size,id) {
 
+        var modalInstance = $uibModal.open({
+            animation: $rootScope.animationsEnabled,
+            templateUrl: 'contenteditmodal',
+            controller: 'editcontent',
+            size: size,
+            resolve: {
+                items: function () {
+                    return id
+                }
+            }
+        });
+    }
 
 }]);
+
+
+r1headzappvar.service('contentservice', function($http, $log, $q) {
+    var d;
+    this.getcontent= function(url) {
+        $http.get(url)
+            .success(function(data) {
+                d= data;
+            }).error(function(msg, code) {
+                $log.error(msg, code);
+            });
+        return d;
+    }
+});
+
+
+r1headzappvar.filter('startFrom', function () {
+    return function (input, start) {
+        if (input) {
+            start = +start;
+            return input.slice(start);
+        }
+        return [];
+    };
+});
+
+r1headzappvar.directive('content',['$compile','$sce','$state','$rootScope', function($compile,$sce,$state,$rootScope) {
+    var directive = {};
+    directive.restrict = 'E';
+    directive.template = '<div class=cc ng-bind-html="student.content | sanitize123" editid="student.id| sanitize123"  ></div><button  class = editableicon editid="student.id| sanitize123" ng-click=editcontent("student.name")>Edit</button><div class=clearfix></div>';
+    directive.scope = {
+        student : "=name"
+    }
+    directive.compile = function(element, attributes) {
+        element.css("display", "inline");
+        var linkFunction = function($scope, element, attributes) {
+            $compile($(element).find('.cc'))($scope);
+            $compile($(element).find('.editableicon'))($scope);
+            $(element).find('.editableicon').on( "click", function() {
+                $rootScope.opencontentmodal('lg',$( this ).parent().attr('id'));
+            });
+
+        }
+        return linkFunction;
+    }
+    return directive;
+}]);
+
 
 r1headzappvar.filter("sanitize123", ['$sce', function($sce) {
     return function(htmlCode){
@@ -37,7 +178,6 @@ r1headzappvar.filter("sanitizelimit", ['$sce', function($sce) {
         return $sce.trustAsHtml(htmlCode);
     }
 }]);
-
 
 r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvider) {
     $urlRouterProvider
@@ -462,33 +602,27 @@ r1headzappvar.controller('contentlist', function($scope,$state,$http,$cookieStor
         //console.log(data);
         $scope.contentlist=[];
         $scope.conf=[];
+        $scope.contenttype=[];
 
         angular.forEach(data, function(value, key){
             //console.log(value.type);
-
             $scope.tempval=value;
             if(value.ctype == "html" || value.ctype=='text') {
                 $scope.tempval.content=JSON.parse(value.content);
             }
-
             $scope.contentlist.splice(value.id,0,$scope.tempval);
 
             $scope.conf[value.id]= $scope.tempval.content;
+            $scope.contenttype[value.id]= $scope.tempval.ctype;
             //array.splice(2, 0, "three");
-
             if(value.parentid!=0) {
 
                 $scope.conf[value.parentid]= $scope.tempval.content;
-
+                $scope.contenttype[value.parentid]= $scope.tempval.ctype;
             }
-
-
         });
         console.log($scope.contentlist);
-
-        //$scope.contentlist=data;
         $scope.contentlistp = $scope.contentlist.slice($scope.begin, parseInt($scope.begin+$scope.perPage));
-
 
     });
 
@@ -541,16 +675,22 @@ r1headzappvar.controller('contentlist', function($scope,$state,$http,$cookieStor
 });
 
 
-r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$cookieStore,$rootScope,Upload,$sce,$stateParams) {
+r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,$state,$http,$cookieStore,$rootScope,Upload,$sce,$stateParams,$uibModalInstance,items) {
 
+    $scope.ok = function () {
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
     $scope.form={};
     $scope.form.resume = '';
     $scope.form.resumearrn = new Array();
     $scope.form.resumearrp = new Array();
     $scope.form.resume = null;;
-
-    $scope.id=$stateParams.id;
-
+    if(typeof (items)=='undefined')$scope.id=$stateParams.id;
+    else $scope.id=items;
 
     $http({
         method  : 'GET',
@@ -559,15 +699,15 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
         data    : $.param({'id':$scope.userid}),  // pass in data as strings
         headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
     }) .success(function(data) {
-         console.log(data.length);
+        console.log(data.length);
         //console.log($scope.form);
         console.log('after form');
+        $rootScope.currentlistdata=data;
         $scope.form = {
             cname: data[data.length-1].cname,
             ctype: data[data.length-1].ctype,
             description: data[data.length-1].description,
             parentid:data[data.length-1].id
-            //ismultiple: data.content.length,
         }
 
         if(data[data.length-1].parentid!=0) $scope.form.parentid=data[data.length-1].parentid;
@@ -594,9 +734,8 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
             $scope.form.image_url_url=data[data.length-1].content;
             $scope.cimage=true;
             $scope.form.ismultiple='no';
-
         }
-  console.log($scope.form);
+        console.log($scope.form);
         console.log('after form');
     });
 
@@ -618,13 +757,10 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
     };
 
     $scope.caclismultiple=function(){
-
         if($scope.form.ismultiple=='yes'){
-
             $scope.ismultipleval=true;
         }
         else   $scope.ismultipleval=false;
-
     }
 
     $scope.delcopy=function(ev){
@@ -640,7 +776,6 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
             $scope.form.resumearrp.splice(spval, 1);
             $(target).parent().remove();
         }
-
         if($scope.ctext==true || $scope.chtml==true){
             console.log($(target).prev().prev().attr('indexval'));
 
@@ -656,10 +791,7 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
             }else{
                 alert('You can not delete default content area' );
             }
-
         }
-
-
     }
     $scope.addcopy=function(ev){
 
@@ -693,7 +825,7 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
              \ ng-model='form.chtml["+addedval+"]'   \
                 \ required\
               \  ></textarea>\
-        \<div class='clearfix'></div>\
+             \<div class='clearfix'></div>\
                \ <button type='button' ng-click='delcopy($event)' class='btn btn-primary'>Delete</button>\
                \ </div>\
                 \<div class='clearfix'></div>");
@@ -701,8 +833,6 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
                 var res=$(target).parent().find('.copyarea').last();
 
                 $compile(res)($scope || $rootScope);
-                //$rootScope.$digest();
-
             }
         }
         else {
@@ -716,7 +846,6 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
     $scope.chtml=false;
     $scope.ctext=false;
 
-
     $scope.ctype=function(ctype){
 
         $scope.cimage=false;
@@ -725,22 +854,13 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
 
         if(ctype=='html') {
 
-            // $('textarea[name^="chtml"]').attr('required','');
             $scope.chtml=true;
         }
         if(ctype=='text') {
-            //$('textarea[name^="ctext"]').attr('required','');
             $scope.ctext=true;
         }
         if(ctype=='image') $scope.cimage=true;
-
-
-
-
-
     }
-
-
 
     /*file upload part start */
 
@@ -808,38 +928,24 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
     },2000);
 
 
-
     $scope.contentValidator=function(){
-
         if($scope.add_Admin.$submitted){
-
             if($scope.form.ismultiple=='yes'){
-
                 $scope.ismultipleval=true;
             }
             else   $scope.ismultipleval=false;
-
-
             if(typeof ($scope.form.ismultiple)!='undefined') return true;
-
             else return 'Required !' ;
-
         }
-
     }
     $scope.contenetv=function(){
-
         if($scope.add_Admin.$submitted){
-
             console.log($scope.form.ctext);
             if(typeof ($scope.form.ctext)!='undefined')
                 console.log(Object.keys($scope.form.ctext).length);
             console.log($('textarea[name^="ctext"]').length);
-
             console.log('in cont validator');
-
         }
-
     }
 
     $scope.submitadminForm=function(){
@@ -855,12 +961,8 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
             $scope.form.ctext=JSON.stringify($scope.form.ctext);
 
         }
-
-
         console.log($scope.form);
         console.log($.param($scope.form));
-
-
         $http({
             method  : 'POST',
             async:   false,
@@ -869,68 +971,91 @@ r1headzappvar.controller('editcontent', function($compile,$scope,$state,$http,$c
             headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
         }) .success(function(data) {
             console.log(data);
-
-            if(typeof ($rootScope.previousState)!='undefined') $state.go($rootScope.previousState);
+            if($state.current!='edit-content'){
+                $rootScope.refreshcontent();
+                setTimeout(function(){
+                    $rootScope.refreshcontent();
+                    $scope.cancel();
+                },1900);
+            }
+            else{
+                if(typeof ($rootScope.previousState)!='undefined') $state.go($rootScope.previousState);
+                else $state.go('contentlist');
+            }
         });
 
     }
 
-    $scope.employmentsubmit=function(){
+    $scope.iseditableformon=true
 
+    $rootScope.getpreview=function(){
+        $scope.iseditableformon=false;
 
+        if($scope.chtml == true ){
 
-        $http({
-            method  : 'POST',
-            async:   false,
-            url     : $scope.adminUrl+'addemployement',
-            data    : $.param($scope.form),  // pass in data as strings
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }) .success(function(data) {
-            $('#employmentmodal').modal('show');
-            //console.log($scope.signupForm)
-            $scope.employmentform.reset();
-            $scope.form={};
+            $scope.previewcontent=$scope.form.chtml[0];
 
-            // $('#employmentmodal').modal('show');
-            setTimeout(function(){
+        }
+        if($scope.ctext == true ){
 
+            $scope.previewcontent=$scope.form.ctext[0];
 
-                $scope.form.country={};
-                $scope.form.country.s_name='Belize';
-                $('#country').val(20);
-                $('#employmentmodal').modal('hide');
+        }
+        if($scope.cimage == true ){
 
-            },3000);
+            $scope.previewcontent="<img src=nodeserver/uploads/"+$scope.form.image_url_url+" /> ";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        });
-
-
-
-
-
+        }
     }
 
+    $rootScope.update=function(){
+        console.log($scope.contenetselected);
+
+
+
+        $scope.form = {
+            cname: $scope.contenetselected.cname,
+            ctype: $scope.contenetselected.ctype,
+            description: $scope.contenetselected.description,
+            parentid:$scope.contenetselected.id
+        }
+
+        if($scope.contenetselected.parentid!=0) $scope.form.parentid=$scope.contenetselected.parentid;
+        if($scope.contenetselected.ctype!='image') {
+            $scope.contenetselected.content = JSON.parse($scope.contenetselected.content);
+
+            if ($scope.contenetselected.content.length > 1) $scope.form.ismultiple = 'yes';
+            else $scope.form.ismultiple = 'no';
+        }else {
+
+            $scope.form.ismultiple = 'no';
+        }
+        if($scope.contenetselected.ctype=='html') {
+            $scope.chtml=true;
+            $scope.form.chtml=$scope.contenetselected.content;
+        }
+        if($scope.contenetselected.ctype=='text') {
+            $scope.form.ctext=$scope.contenetselected.content;
+            $scope.ctext=true;
+        }
+        if($scope.contenetselected.ctype=='image'){
+            $scope.form.cimage=$scope.contenetselected.content;
+            $scope.form.resume=$scope.contenetselected.content;
+            $scope.form.image_url_url=$scope.contenetselected.content;
+            $scope.cimage=true;
+            $scope.form.ismultiple='no';
+        }
+    }
+});
+
+
+r1headzappvar.controller('home', function($scope,$state,$cookieStore,$rootScope,contentservice) {
 
 
 
 });
 
+r1headzappvar.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
 
-
-
-r1headzappvar.controller('home', function($scope,$state,$cookieStore,$rootScope) {
 
 });
