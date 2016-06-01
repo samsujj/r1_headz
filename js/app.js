@@ -142,7 +142,7 @@ r1headzappvar.filter('startFrom', function () {
 r1headzappvar.directive('content',['$compile','$sce','$state','$rootScope', function($compile,$sce,$state,$rootScope) {
     var directive = {};
     directive.restrict = 'E';
-    directive.template = '<div class=cc ng-bind-html="student.content | sanitize123" editid="student.id| sanitize123"  ></div><button  class = editableicon editid="student.id| sanitize123" ng-click=editcontent("student.name")>Edit</button><div class=clearfix></div>';
+    directive.template = '<div class=contentbind ng-bind-html="student.content | sanitize123" editid="student.id| sanitize123"  ></div><button  class = editableicon editid="student.id| sanitize123" ng-click=editcontent("student.name")>Edit</button><div class=clearfix></div>';
     directive.scope = {
         student : "=name"
     }
@@ -151,6 +151,16 @@ r1headzappvar.directive('content',['$compile','$sce','$state','$rootScope', func
         var linkFunction = function($scope, element, attributes) {
             $compile($(element).find('.cc'))($scope);
             $compile($(element).find('.editableicon'))($scope);
+            $(element).css('display','inline-block');
+            $(element).bind("DOMSubtreeModified",function(){
+                setTimeout(function(){
+                    $(element).find('.editableicon').css('position','absolute').css('top',parseFloat($(element).offset().top+$(element).height()-30)).css('left',parseFloat($(element).offset().left+$(element).width()-40));
+                    //console.log($(element).height());
+                    console.log($(element).next().width());
+                },1000);
+
+                console.log('changed');
+            });
             $(element).find('.editableicon').on( "click", function() {
                 $rootScope.opencontentmodal('lg',$( this ).parent().attr('id'));
             });
@@ -191,6 +201,10 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
 
                 'content': {
                     templateUrl: 'partial/home.html' ,
+                    controller: 'home'
+                },
+                'modalview': {
+                    templateUrl: 'partial/modalview.html' ,
                     controller: 'home'
                 },
             }
@@ -1012,6 +1026,8 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
         console.log($scope.contenetselected);
 
 
+        console.log($scope.contenetselected.ctype+'==type');
+
 
         $scope.form = {
             cname: $scope.contenetselected.cname,
@@ -1022,7 +1038,10 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
 
         if($scope.contenetselected.parentid!=0) $scope.form.parentid=$scope.contenetselected.parentid;
         if($scope.contenetselected.ctype!='image') {
-            $scope.contenetselected.content = JSON.parse($scope.contenetselected.content);
+            console.log($scope.contenetselected.content);
+            console.log($scope.contenetselected.content[0]);
+            if(typeof ($scope.contenetselected.content)!='object')$scope.contenetselected.content = JSON.parse($scope.contenetselected.content);
+            console.log($scope.contenetselected.content);
 
             if ($scope.contenetselected.content.length > 1) $scope.form.ismultiple = 'yes';
             else $scope.form.ismultiple = 'no';
@@ -1032,18 +1051,27 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
         }
         if($scope.contenetselected.ctype=='html') {
             $scope.chtml=true;
+            $scope.cimage=false;
+            $scope.ctext=false;
             $scope.form.chtml=$scope.contenetselected.content;
+            $scope.previewcontent=$scope.contenetselected.content[0];
         }
         if($scope.contenetselected.ctype=='text') {
             $scope.form.ctext=$scope.contenetselected.content;
             $scope.ctext=true;
+            $scope.cimage=false;
+            $scope.chtml=false;
+            $scope.previewcontent=$scope.contenetselected.content[0];
         }
         if($scope.contenetselected.ctype=='image'){
             $scope.form.cimage=$scope.contenetselected.content;
             $scope.form.resume=$scope.contenetselected.content;
             $scope.form.image_url_url=$scope.contenetselected.content;
             $scope.cimage=true;
+            $scope.ctext=false;
+            $scope.chtml=false;
             $scope.form.ismultiple='no';
+            $scope.previewcontent="<img src=nodeserver/uploads/"+$scope.form.image_url_url+" /> ";
         }
     }
 });

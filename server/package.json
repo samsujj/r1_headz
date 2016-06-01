@@ -1,0 +1,13 @@
+{
+  "name": "Urban-Headz",
+  "version": "0.0.1",
+  "description": "Simple node application.",
+  "main": "server.js",
+  "author": "Debasis",
+  "dependencies": {
+    "body-parser": "1.15.0",
+    "express": "4.13.3",
+    "method-override": "2.3.5",
+    "mysql":"2.10.1"
+  }
+}
