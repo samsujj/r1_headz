@@ -1,7 +1,7 @@
 'use strict';
 
 /* App Module */
-var r1headzappvar = angular.module('r1headzapp', ['ui.router','angularValidator','ngCookies','ui.bootstrap','ngFileUpload','ui.tinymce']);
+var r1headzappvar = angular.module('r1headzapp', ['app2','ui.router','angularValidator','ngCookies','ui.bootstrap','ngFileUpload','ui.tinymce']);
 
 r1headzappvar.run(['$rootScope', '$state','contentservice','$uibModal','$log',function($rootScope, $state,contentservice,$uibModal,$log){
 
@@ -202,6 +202,38 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 'content': {
                     templateUrl: 'partial/home.html' ,
                     controller: 'home'
+                },
+                'header': {
+                    templateUrl: 'partial/header.html' ,
+                    //controller: 'home'
+                },
+                'footer': {
+                    templateUrl: 'partial/footer.html' ,
+                    //controller: 'home'
+                },
+                'modalview': {
+                    templateUrl: 'partial/modalview.html' ,
+                    controller: 'home'
+                },
+            }
+        }
+    )
+
+        .state('t2',{
+            url:"/t2",
+            views: {
+
+                'content': {
+                    templateUrl: 'partial/t1.html' ,
+                    controller: 'home1'
+                },
+                'header': {
+                    templateUrl: 'partial/header.html' ,
+                    //controller: 'app2.home1'
+                },
+                'footer': {
+                    templateUrl: 'partial/footer.html' ,
+                    //controller: 'home'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,

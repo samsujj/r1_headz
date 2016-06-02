@@ -1,11 +1,35 @@
-<h1>R1 HEADZ</h1>
-<h2>This is Home Page</h2>
+<div class="container-fluid homebannerblock">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
+                <uib-slide ng-repeat="slide in bannerslides">
+                    <img src="{{slide.image}}" alt="...">
+                    <div class="carousel-caption">
+                        {{slide.image1}}
+                        <h2>{{slide.text}}</h2>
+                        <p>{{slide.p1}}</p>
+                        <p>{{slide.p2}}</p>
+                    </div>
+                </uib-slide>
+            </uib-carousel>
+            <div id="sliderleftbg"><img src="images/hometopsliderleftbg.png" alt=""></div>
+            <div id="sliderrighttbg"><img src="images/hometopsliderrightbg.png" alt=""></div>
+        </div>
+    </div>
+</div>
 
-<content name='hkj1' id='1' > </content>
-
-<content name='h4452' id='2' > </content>
-<div class="clearfix"></div>
-<content name='sdfsdf3' id='3' > </content>
+<div class="container-fluid homeblock2">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <img src="images/img-homeblock2.png">
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 homeblock2right">
+            <h2>LOREM <span>IPSUM</span></h2>
+            <h6>lorem ipsum dolor sit amet</h6>
+            <p><span>The UrbanHeadz LLC</span> creates the Timeless Restored Collectable, our hand crafted, Iconic American Bobblehead, for the global urban consumer markets. Our product line and licenses of A-list Urban artist/personalities included the legendry Michael Jackson that has been in the marketplace. </p>
+        </div>
+    </div>
+</div>
 
 
 
