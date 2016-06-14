@@ -143,6 +143,7 @@ r1headzappvar.directive('content',['$compile','$sce','$state','$rootScope', func
     var directive = {};
     directive.restrict = 'E';
     directive.template = '<div class=contentbind ng-bind-html="student.content | sanitize123" editid="student.id| sanitize123"  ></div><button  class = editableicon editid="student.id| sanitize123" ng-click=editcontent("student.name")>Edit</button><div class=clearfix></div>';
+
     directive.scope = {
         student : "=name"
     }
@@ -152,14 +153,16 @@ r1headzappvar.directive('content',['$compile','$sce','$state','$rootScope', func
             $compile($(element).find('.cc'))($scope);
             $compile($(element).find('.editableicon'))($scope);
             $(element).css('display','inline-block');
+            $(element).css('position','relative');
             $(element).bind("DOMSubtreeModified",function(){
                 setTimeout(function(){
-                    $(element).find('.editableicon').css('position','absolute').css('top',parseFloat($(element).offset().top+$(element).height()-30)).css('left',parseFloat($(element).offset().left+$(element).width()-40));
+                   // $(element).find('.editableicon').css('position','absolute').css('top',parseFloat($(element).offset().top+$(element).height()-30)).css('left',parseFloat($(element).offset().left+$(element).width()-40));
+                    $(element).find('.editableicon').css('position','absolute').css('top',0).css('right',0);
                     //console.log($(element).height());
-                    console.log($(element).next().width());
+                   // console.log($(element).next().width());
                 },1000);
 
-                console.log('changed');
+              //  console.log('changed');
             });
             $(element).find('.editableicon').on( "click", function() {
                 $rootScope.opencontentmodal('lg',$( this ).parent().attr('id'));
@@ -196,7 +199,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
 
     $stateProvider
         .state('index',{
-            url:"/index",
+            url:"/home",
             views: {
 
                 'content': {
@@ -205,7 +208,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'header': {
                     templateUrl: 'partial/header.html' ,
-                    //controller: 'home'
+                    controller: 'header'
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
@@ -219,6 +222,103 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
         }
     )
 
+        .state('aboutus',{
+            url:"/aboutus",
+            views: {
+
+                'content': {
+                    templateUrl: 'partial/aboutus.html' ,
+                    controller: 'home'
+                },
+                'header': {
+                    templateUrl: 'partial/header.html' ,
+                    controller: 'header'
+                },
+                'footer': {
+                    templateUrl: 'partial/footer.html' ,
+                    //controller: 'aboutus'
+                },
+                'modalview': {
+                    templateUrl: 'partial/modalview.html' ,
+                    controller: 'home'
+                },
+            }
+        }
+    )
+
+        .state('contactus',{
+            url:"/contact-us",
+            views: {
+
+                'content': {
+                    templateUrl: 'partial/contactus.html' ,
+                    controller: 'home'
+                },
+                'header': {
+                    templateUrl: 'partial/header.html' ,
+                    controller: 'header'
+                },
+                'footer': {
+                    templateUrl: 'partial/footer.html' ,
+                    //controller: 'aboutus'
+                },
+                'modalview': {
+                    templateUrl: 'partial/modalview.html' ,
+                    controller: 'home'
+                },
+            }
+        }
+    )
+
+        .state('ourcreation',{
+            url:"/our-creation",
+            views: {
+
+                'content': {
+                    templateUrl: 'partial/ourcreation.html' ,
+                    controller: 'home'
+                },
+                'header': {
+                    templateUrl: 'partial/header.html' ,
+                    controller: 'header'
+                },
+                'footer': {
+                    templateUrl: 'partial/footer.html' ,
+                    //controller: 'aboutus'
+                },
+                'modalview': {
+                    templateUrl: 'partial/modalview.html' ,
+                    controller: 'home'
+                },
+            }
+        }
+    )
+
+        .state('incredible-story',{
+                url:"/incredible-story",
+                views: {
+
+                    'content': {
+                        templateUrl: 'partial/incredible-story.html' ,
+                        controller: 'home'
+                    },
+                    'header': {
+                        templateUrl: 'partial/header.html' ,
+                        controller: 'header'
+                    },
+                    'footer': {
+                        templateUrl: 'partial/footer.html' ,
+                        //controller: 'incredible-story'
+                    },
+                    'modalview': {
+                        templateUrl: 'partial/modalview.html' ,
+                        controller: 'home'
+                    },
+                }
+            }
+        )
+
+
         .state('t2',{
             url:"/t2",
             views: {
@@ -229,7 +329,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'header': {
                     templateUrl: 'partial/header.html' ,
-                    //controller: 'app2.home1'
+                    controller: 'header'
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
@@ -348,7 +448,7 @@ r1headzappvar.controller('addcontent', function($compile,$scope,$state,$http,$co
         ],
         // toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
         toolbar: ' undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link  |   media fullpage | forecolor backcolor',
-        valid_elements : "a[href|target| href=javascript:void(0)],strong,b,img,div[align|class],br,span,label,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen]",
+        valid_elements : "a[href|target| href=javascript:void(0)],strong,b,img,div[align|class],br,span,label,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
         force_p_newlines : false,
         forced_root_block:'',
         extended_valid_elements : "label,span,i[class]"
@@ -796,7 +896,7 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
         toolbar2: "print preview media | forecolor backcolor emoticons",
-        valid_elements : "a[href|target],strong,b,img[src|alt],div[align|class],br,span,label,h3,h4,h2,h1,strong,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen]",
+        valid_elements : "a[href|target],strong,b,img[src|alt],div[align|class],br,span,label,h3,h4,h2,h1,strong,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
         extended_valid_elements : "label,span,i[class]",
         'force_p_newlines'  : false,
         'forced_root_block' : '',
@@ -1109,11 +1209,30 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
 });
 
 
+r1headzappvar.controller('header', function($scope,$state,$cookieStore,$rootScope,contentservice) {
+
+    $scope.pagename = $state.current.name;
+
+    console.log($scope.pagename);
+
+});
+
 r1headzappvar.controller('home', function($scope,$state,$cookieStore,$rootScope,contentservice) {
 
 
+});
+
+r1headzappvar.controller('aboutus', function($scope,$state,$cookieStore,$rootScope,contentservice) {
+
 
 });
+
+r1headzappvar.controller('incredible-story', function($scope,$state,$cookieStore,$rootScope,contentservice) {
+
+
+});
+
+
 
 r1headzappvar.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
 

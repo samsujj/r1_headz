@@ -1,38 +1,288 @@
-<div class="container-fluid homebannerblock">
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
-                <uib-slide ng-repeat="slide in bannerslides">
-                    <img src="{{slide.image}}" alt="...">
-                    <div class="carousel-caption">
-                        {{slide.image1}}
-                        <h2>{{slide.text}}</h2>
-                        <p>{{slide.p1}}</p>
-                        <p>{{slide.p2}}</p>
+<section id="main-slider" class="no-margin">
+    <div class="carousel slide">
+        <!-- <ol class="carousel-indicators">
+             <li data-target="#main-slider" data-slide-to="0" class="active"></li>
+             <li data-target="#main-slider" data-slide-to="1"></li>
+             <li data-target="#main-slider" data-slide-to="2"></li>
+             <li data-target="#main-slider" data-slide-to="3"></li>
+        </ol>-->
+        <div class="carousel-inner">
+
+            <div class="item active" style="background-image: url(../images/slider1.png)">
+                <div class="container-fluid">
+                    <div class="row slide-margin">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="carousel-content">
+                                <content name='mainsliderimage49' id='49' > </content>
+                                <h1 class="animation animated-item-1"><content name='mainsliderh150' id='50' > </content></h1>
+                                <h6 class="animation animated-item-2"><content name='mainsliderh651' id='51' > </content></h6>
+                                <p><content name='mainsliderp52' id='52' > </content></p>
+                            </div>
+                        </div>
                     </div>
-                </uib-slide>
-            </uib-carousel>
-            <div id="sliderleftbg"><img src="images/hometopsliderleftbg.png" alt=""></div>
-            <div id="sliderrighttbg"><img src="images/hometopsliderrightbg.png" alt=""></div>
+                </div>
+            </div><!--/.item-->
+
+            <!--<div class="item" style="background-image: url(../images/slider2.png)">
+                <div class="container">
+                    <div class="row slide-margin">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="carousel-content">
+                                <content name='mainsliderimage49' id='49' > </content>
+                                <h1 class="animation animated-item-1"><content name='mainsliderh150' id='50' > </content></h1>
+                                <h6 class="animation animated-item-2"><content name='mainsliderh651' id='51' > </content></h6>
+                                <p><content name='mainsliderp52' id='52' > </content></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item" style="background-image: url(../images/slider3.png)">
+                <div class="container">
+                    <div class="row slide-margin">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="carousel-content">
+                                <content name='mainsliderimage49' id='49' > </content>
+                                <h1 class="animation animated-item-1"><content name='mainsliderh150' id='50' > </content></h1>
+                                <h6 class="animation animated-item-2"><content name='mainsliderh651' id='51' > </content></h6>
+                                <p><content name='mainsliderp52' id='52' > </content></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item" style="background-image: url(../images/slider1.png)">
+                <div class="container">
+                    <div class="row slide-margin">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="carousel-content">
+                                <content name='mainsliderimage49' id='49' > </content>
+                                <h1 class="animation animated-item-1"><content name='mainsliderh150' id='50' > </content></h1>
+                                <h6 class="animation animated-item-2"><content name='mainsliderh651' id='51' > </content></h6>
+                                <p><content name='mainsliderp52' id='52' > </content></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/.item-->
+        </div><!--/.carousel-inner-->
+    </div><!--/.carousel-->
+</section><!--/#main-slider-->
+
+<section id="homeblock2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="homeblock2">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 homeblock2left wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+                    <content name='homeblock2img53' id='53' > </content>
+                </div><!--/.col-md-4-->
+
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 homeblock2right wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
+                    <div class="homeblock2-wrap">
+                        <h2><content name='homeblock2wraph254' id='54' > </content></h2>
+                        <h6><content name='homeblock2wraph655' id='55' > </content></h6>
+                        <p><content name='homeblock2wrapp56' id='56' > </content></p>
+                        <div class="divider"></div>
+                    </div>
+                </div><!--/.col-md-4-->
+            </div><!--/.services-->
+        </div><!--/.row-->
+    </div><!--/.container-->
+</section><!--/#feature-->
+
+
+<section id="homeblock3" class="service-item">
+    <div class="container">
+        <div class="center wow fadeInDown">
+            <h2><content name='homeblock3h257' id='57' > </content></h2>
+            <h2><content name='homeblock3h2second58' id='58' > </content></h2>
+            <p class="lead"><content name='homeblock3p59' id='59' > </content></p>
+        </div>
+    </div><!--/.container-->
+    <div class="iconyes"><content name='homeblock3iconyes60' id='60' > </content></div>
+    <div class="parallelogram">
+        <div class="parallelogramwrapper">
+            <form>
+                <div class="formhomeinnertop">
+                    <div class="form-group">
+                        <h3>Fill out this quick form and we will get right backto you</h3>
+                        <div class="divider"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Firstname" value="" size="40" class="form-control" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Lastname" value="" size="40" class="form-control" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Phonenumber" value="" size="40" class="form-control" placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <input type="email" name="Email" value="" size="40" class="form-control" placeholder="Email Address">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="industry" value="" size="40" class="form-control" placeholder="Industry">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Others" value="" size="40" class="form-control" placeholder="Others">
+                </div>
+                <div class="form-group">
+                    <textarea rows="2" cols="1" class="form-control" placeholder="Any more information"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default button_example">Submit</button>
+            </form>
         </div>
     </div>
-</div>
+</section><!--/#services-->
 
-<div class="container-fluid homeblock2">
-    <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <img src="images/img-homeblock2.png">
+<section id="homeblock4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 headerhomeblock4 wow fadeInDown">
+                <div class="skill">
+                    <h2><content name='homeblock4skillh261' id='61' > </content></h2>
+                    <p><content name='homeblock4skillp62' id='62' > </content></p>
+                </div>
+            </div><!--/.col-sm-6-->
+        </div><!--/.row-->
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock463' id='63' > </content>
+                <div class="titleimg blue">
+                    <content name='singlehomeblock4title164' id='64' > </content>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock4gal265' id='65' > </content>
+                <div class="titleimg lightblue">
+                    <content name='singlehomeblock4gal2title66' id='66' > </content>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock4gal367' id='67' > </content>
+                <div class="titleimg deepgreen">
+                    <content name='singlehomeblock4gal3title68' id='68' > </content>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock4gal469' id='69' > </content>
+                <div class="titleimg red">
+                    <content name='singlehomeblock4gal4title70' id='70' > </content>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock4gal571' id='71' > </content>
+                <div class="titleimg yelloworcar">
+                    <content name='singlehomeblock4gal5title72' id='72' > </content>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 singlehomeblock4">
+                <content name='singlehomeblock4gal673' id='73' > </content>
+                <div class="titleimg lightgreen">
+                    <content name='singlehomeblock4gal6title74' id='74' > </content>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 homeblock2right">
-            <h2>LOREM <span>IPSUM</span></h2>
-            <h6>lorem ipsum dolor sit amet</h6>
-            <p><span>The UrbanHeadz LLC</span> creates the Timeless Restored Collectable, our hand crafted, Iconic American Bobblehead, for the global urban consumer markets. Our product line and licenses of A-list Urban artist/personalities included the legendry Michael Jackson that has been in the marketplace. </p>
+    </div><!--/.container-->
+</section><!--/#middle-->
+
+<section id="homeblock5">
+    <div class="container-fluid">
+        <div class="homeblock5top">
+            <content name='homeblock5topimage75' id='75' > </content>
+        </div>
+        <div class="homeblock5middle">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 homeblock5middleleft">
+                    <content name='homeblock5middleleftimage76' id='76' > </content>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 homeblock5middleright">
+                    <h3><content name='homeblock5middlerighth377' id='77' > </content><content name='homeblock5middlerighth3image99' id='99' > </content></h3>
+                    <div class="homeblock5middlerightmiddle">
+                        <p><content name='homeblock5middlerightmiddlep78' id='78' > </content></p>
+                        <content name='homeblock5middlerightmiddlelist79' id='79' > </content>
+                        <div class="clearfix"></div>
+                        <content name='homeblock5middlerightmiddleimg81' id='81' > </content>
+                        <div class="clearfix"></div>
+                        <div class="homeblock5middlevideoblock">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 homeblock5middlevideoblockleft">
+                                    <div class="videoWrapper">
+                                        <iframe id="ytplayer" type="text/html" title="YouTube video player" allowfullscreen="1" height="326" width="100%"
+                                                src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+                                                frameborder="0"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 homeblock5middlevideoblockright">
+                                    <p><content name='homeblock5middlevideoblockrightp82' id='82' > </content></p>
+                                    <h2><content name='homeblock5middlevideoblockrighth283' id='83' > </content></h2>
+                                    <p><content name='homeblock5middlevideoblockrightp284' id='84' > </content></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
-
-
-
-
-
+<section id="homeblock6">
+    <div class="container-fluid">
+        <h2><content name='homeblock6h285' id='85' > </content></h2>
+        <p><content name='homeblock6p86' id='86' > </content></p>
+        <div class="homeblock6list">
+            <div class="singlehomewrapper">
+                <div class="singlehome">
+                    <content name='singlehomeimage187' id='87' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title188' id='88' > </content>
+                    </div>
+                </div>
+            </div>
+            <div class="singlehomewrapper">
+                <div class="singlehome">
+                    <content name='singlehomeimage289' id='89' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title290' id='90' > </content>
+                    </div>
+                </div>
+            </div>
+            <div class="singlehomewrapper">
+                <div class="singlehome">
+                    <content name='singlehomeimage391' id='91' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title392' id='92' > </content>
+                    </div>
+                </div>
+            </div>
+            <div class="singlehomewrapper">
+                <div class="singlehome">
+                    <content name='singlehomeimage493' id='93' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title494' id='94' > </content>
+                    </div>
+                </div>
+            </div>
+            <div class="singlehomewrapper">
+                <div class="singlehome">
+                    <content name='singlehome595' id='95' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title596' id='96' > </content>
+                    </div>
+                </div>
+            </div>
+            <div class="singlehomewrapper singlehomewrapperbig">
+                <div class="singlehome">
+                    <content name='singlehome697' id='97' > </content>
+                    <div class="singlehomeblock6title">
+                        <content name='singlehomeblock6title698' id='98' > </content>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
