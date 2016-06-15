@@ -15,6 +15,7 @@ r1headzappvar.run(['$rootScope', '$state','contentservice','$uibModal','$log',fu
         $rootScope.currentState = to.name;
         $(document).scrollTop(0);
 
+
         $rootScope.refreshcontent=function(){
             if (typeof (data) != 'undefined') unset(data);
             $rootScope.interval = 600;
@@ -99,17 +100,19 @@ r1headzappvar.run(['$rootScope', '$state','contentservice','$uibModal','$log',fu
 
     $rootScope.opencontentmodal = function (size,id) {
 
-        var modalInstance = $uibModal.open({
-            animation: $rootScope.animationsEnabled,
-            templateUrl: 'contenteditmodal',
-            controller: 'editcontent',
-            size: size,
-            resolve: {
-                items: function () {
-                    return id
-                }
-            }
-        });
+       if($rootScope.userid!=0) {
+           var modalInstance = $uibModal.open({
+               animation: $rootScope.animationsEnabled,
+               templateUrl: 'contenteditmodal',
+               controller: 'editcontent',
+               size: size,
+               resolve: {
+                   items: function () {
+                       return id
+                   }
+               }
+           });
+       }
     }
 
 }]);
@@ -194,11 +197,11 @@ r1headzappvar.filter("sanitizelimit", ['$sce', function($sce) {
 
 r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvider) {
     $urlRouterProvider
-        .otherwise("/index");
+        .otherwise("/home");
 
 
     $stateProvider
-        .state('index',{
+        .state('home',{
             url:"/home",
             views: {
 
@@ -212,7 +215,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
-                    //controller: 'home'
+                    controller: 'header'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,
@@ -236,7 +239,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
-                    //controller: 'aboutus'
+                    controller: 'header'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,
@@ -260,7 +263,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
-                    //controller: 'aboutus'
+                    controller: 'header'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,
@@ -284,7 +287,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
-                    //controller: 'aboutus'
+                    controller: 'header'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,
@@ -308,7 +311,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                     },
                     'footer': {
                         templateUrl: 'partial/footer.html' ,
-                        //controller: 'incredible-story'
+                        controller: 'header'
                     },
                     'modalview': {
                         templateUrl: 'partial/modalview.html' ,
@@ -333,7 +336,7 @@ r1headzappvar.config(function($stateProvider, $urlRouterProvider,$locationProvid
                 },
                 'footer': {
                     templateUrl: 'partial/footer.html' ,
-                    //controller: 'home'
+                    controller: 'header'
                 },
                 'modalview': {
                     templateUrl: 'partial/modalview.html' ,
@@ -448,10 +451,10 @@ r1headzappvar.controller('addcontent', function($compile,$scope,$state,$http,$co
         ],
         // toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
         toolbar: ' undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link  |   media fullpage | forecolor backcolor',
-        valid_elements : "a[href|target| href=javascript:void(0)],strong,b,img,div[align|class],br,span,label,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
+        valid_elements : "a[href|target| href=javascript:void(0)],strong,b,img,div[align|class],br,span[class],label,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
         force_p_newlines : false,
         forced_root_block:'',
-        extended_valid_elements : "label,span,i[class]"
+        extended_valid_elements : "label,span[class],i[class]"
     };
 
     $scope.form={};
@@ -896,8 +899,8 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
         toolbar2: "print preview media | forecolor backcolor emoticons",
-        valid_elements : "a[href|target],strong,b,img[src|alt],div[align|class],br,span,label,h3,h4,h2,h1,strong,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
-        extended_valid_elements : "label,span,i[class]",
+        valid_elements : "a[href|target],strong,b,img[src|alt],div[align|class],br,span[class],label,h3,h4,h2,h1,strong,i[class],ul[class],ol[class],li[class],iframe[width|height|src|frameborder|allowfullscreen],sub",
+        extended_valid_elements : "label,span[class],i[class]",
         'force_p_newlines'  : false,
         'forced_root_block' : '',
     };
@@ -1209,15 +1212,105 @@ r1headzappvar.controller('editcontent', function(contentservice,$compile,$scope,
 });
 
 
-r1headzappvar.controller('header', function($scope,$state,$cookieStore,$rootScope,contentservice) {
-
+r1headzappvar.controller('header', function($scope,$state,$cookieStore,$rootScope,contentservice,$uibModal) {
+    $('')
+    $rootScope.items = ['item1', 'item2', 'item3'];
     $scope.pagename = $state.current.name;
+    $rootScope.userid=0;
 
+    if(typeof ($cookieStore.get('userid'))!='undefined'){
+
+        $rootScope.userid=$cookieStore.get('userid');
+    }
+    if($rootScope.userid==0){
+        $('.editableicon').css('background','none');
+        $('.editableicon').css('cursor','inherit');
+    }
+    else{
+        $('.editableicon').css('background','rgba(0, 0, 0, 0) url("../images/icon-editable.png") no-repeat scroll 0 0');
+        $('.editableicon').css('cursor','pointer');
+    }
     console.log($scope.pagename);
+    $scope.loginopen=function(){
+        console.log(11);
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'loginmodal.html',
+            controller: 'ModalInstanceCtrl',
+            size: 'lg',
+            scope: $rootScope,
+            resolve: {
+                items: function () {
+                    return true;
+                }
+            }
+        });
+    }
+
+
+    $rootScope.logout= function(){
+    $cookieStore.remove('userid');
+    $cookieStore.remove('useremail');
+    $rootScope.userid=0;
+   // $('.editableicon').css('display','none');
+    //$('.editableicon').hide();
+        $('.editableicon').css('background','none');
+        $('.editableicon').css('cursor','inherit');
+    $state.go('home');
+}
 
 });
 
-r1headzappvar.controller('home', function($scope,$state,$cookieStore,$rootScope,contentservice) {
+r1headzappvar.controller('home', function($http,$scope,$state,$cookieStore,$rootScope,contentservice,$uibModal) {
+
+    $scope.homesignupsubmit=function(){
+
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.adminUrl+'signupinsert',
+             data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+            $scope.homesignupForm.reset();
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'signupsuccess.html',
+                controller: 'ModalInstanceCtrl',
+                size: 'lg',
+                scope: $rootScope,
+                resolve: {
+                    items: function () {
+                        return true;
+                    }
+                }
+            });
+        });
+
+    }
+    $scope.contactsubmit=function(){
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.adminUrl+'newcontact1',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {
+        $scope.contactForm.reset();
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'contactsuccess.html',
+            controller: 'ModalInstanceCtrl',
+            size: 'lg',
+            scope: $rootScope,
+            resolve: {
+                items: function () {
+                    return true;
+                }
+            }
+        });
+        });
+    }
 
 
 });
@@ -1234,7 +1327,56 @@ r1headzappvar.controller('incredible-story', function($scope,$state,$cookieStore
 
 
 
-r1headzappvar.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+r1headzappvar.controller('ModalInstanceCtrl', function ($state,$cookieStore,$http,$rootScope,Upload,$uibModal,$timeout,$scope, $uibModalInstance, items) {
+    $scope.cancel111 = function () {
+
+        $uibModalInstance.dismiss('cancel');
+        $state.go('home');
+    };
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+    $rootScope.email='iftekarkta@gmail.com';
+    $rootScope.password=123456;
+    $scope.popuplogin = function(){
+        $scope.errormsg='';
+        $rootScope.stateIsLoading = true;
+/*
+        $http({
+            method  : 'POST',
+            async:   false,
+            url     : $scope.adminUrl+'adminlogin',
+            data    : $.param($scope.form),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }) .success(function(data) {*/
+
+
+            if($scope.form.email == $rootScope.email && $scope.form.password == $rootScope.password) {
+
+                $uibModalInstance.dismiss('cancel');
+
+
+                $cookieStore.put('userid', 1);
+                $cookieStore.put('useremail',  $rootScope.email);
+
+                if(typeof ($cookieStore.get('userid'))!='undefined'){
+
+                    $rootScope.userid=$cookieStore.get('userid');
+                }
+                $('.editableicon').css('background','rgba(0, 0, 0, 0) url("../images/icon-editable.png") no-repeat scroll 0 0');
+                $('.editableicon').css('cursor','pointer');
+               // $('.editableicon').css('display','block');
+                $state.go('home');
+
+
+            }else{
+                $rootScope.stateIsLoading = false;
+                $scope.errormsg = 'Invalid email/password';
+            }
+
+
+    }
+
 
 
 });

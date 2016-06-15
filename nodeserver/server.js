@@ -120,20 +120,86 @@ connection.connect(function(error){
 
 app.get('/',function(req,resp){
 
-    connection.query("SELECT * FROM contentmanager ",function(error,rows,fields){
+    var mailer = require("nodemailer");
 
-        if(!!error) console.log('error in db call ');
-        else{
-
-            console.log('success full query');
-            //resp.send('Hello'+rows[0].fname);
-            resp.send(JSON.stringify(rows));
+    // Use Smtp Protocol to send Email
+    var smtpTransport = mailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "itplcc40@gmail.com",
+            pass: "DevelP7@"
         }
-
     });
 
-});
+    var mail = {
+        from: "Yashwant Chavan <john71838@gmail.com>",
+        to: "debasiskar007@gmail.com",
+        subject: "Send Email Using Node.js",
+        //text: "Node.js New world for me",
+        html: "<b>Node.js New world for me</b>"
+    }
 
+    smtpTransport.sendMail(mail, function(error, response){
+        if(error){
+            console.log(error);
+        }else{
+            console.log("Message sent: " + response.message);
+        }
+
+        resp.send((response.message));
+        smtpTransport.close();
+    });
+
+    console.log('success full query');
+    //resp.send('Hello'+rows[0].fname);
+
+
+});
+app.post('/newcontact1',function(req,resp){
+
+
+    resp.header('Content-type: text/html');
+    resp.header("Access-Control-Allow-Origin", "*");  //I have also tried the * wildcard and get the same response
+    resp.header("Access-Control-Allow-Credentials: true");
+    resp.header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+    resp.header('Access-Control-Max-Age: 1000');
+    resp.header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
+
+    var mailer = require("nodemailer");
+
+    // Use Smtp Protocol to send Email
+    var smtpTransport = mailer.createTransport("SMTP",{
+        service: "Gmail",
+        auth: {
+            user: "itplcc40@gmail.com",
+            pass: "DevelP7@"
+        }
+    });
+
+    var mail = {
+        from: req.body.fullname+" <"+req.body.email+">",
+        to: "iftekarkta@gmail.com",
+        subject: "New Contact Form Submission by "+req.body.fullname,
+        //text: "Node.js New world for me",
+        html: "<b>Name</b> :   "+req.body.fullname +"<br><b>Email</b> :   "+req.body.email+ "<br><b>Phone Number</b> :   "+req.body.phone_no +"<br><b>Message</b> :   "+req.body.message ,
+    }
+
+    smtpTransport.sendMail(mail, function(error, response){
+        if(error){
+            console.log(error);
+        }else{
+            console.log("Message sent: " + response.message);
+        }
+
+        resp.send((response.message));
+        smtpTransport.close();
+    });
+
+    console.log('success full query');
+    //resp.send('Hello'+rows[0].fname);
+
+
+});
 
 
 app.get('/listcontent', function (req, resp) {
